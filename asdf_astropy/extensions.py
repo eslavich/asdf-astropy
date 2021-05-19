@@ -18,6 +18,16 @@ from .converters.unit.equivalency import EquivalencyConverter
 from .converters.unit.quantity import QuantityConverter
 from .converters.unit.unit import UnitConverter
 
+from .converters.coordinates.angle import AngleConverter, LatitudeConverter, LongitudeConverter
+from .converters.coordinates.earth_location import EarthLocationConverter
+from .converters.coordinates.frame import FrameConverter, LegacyICRSConverter
+from .converters.coordinates.representation import RepresentationConverter
+from .converters.coordinates.sky_coord import SkyCoordConverter
+from .converters.coordinates.spectral_coord import SpectralCoordConverter
+
+from .converters.time.time import TimeConverter
+from .converters.time.time_delta import TimeDeltaConverter
+
 
 TRANSFORM_CONVERTERS = [
     # astropy.modeling.core
@@ -349,12 +359,12 @@ TRANSFORM_CONVERTERS = [
 # The order here is important; asdf will prefer to use extensions
 # that occur earlier in the list.
 TRANSFORM_MANIFEST_URIS = [
-    "http://stsci.edu/asdf/extensions/transform/manifests/transform-1.5.0",
-    "http://stsci.edu/asdf/extensions/transform/manifests/transform-1.4.0",
-    "http://stsci.edu/asdf/extensions/transform/manifests/transform-1.3.0",
-    "http://stsci.edu/asdf/extensions/transform/manifests/transform-1.2.0",
-    "http://stsci.edu/asdf/extensions/transform/manifests/transform-1.1.0",
-    "http://stsci.edu/asdf/extensions/transform/manifests/transform-1.0.0",
+    "asdf://asdf-format.org/transform/manifests/transform-1.5.0",
+    "asdf://asdf-format.org/transform/manifests/transform-1.4.0",
+    "asdf://asdf-format.org/transform/manifests/transform-1.3.0",
+    "asdf://asdf-format.org/transform/manifests/transform-1.2.0",
+    "asdf://asdf-format.org/transform/manifests/transform-1.1.0",
+    "asdf://asdf-format.org/transform/manifests/transform-1.0.0",
 ]
 
 
@@ -373,6 +383,55 @@ TRANSFORM_EXTENSIONS = [
 ASTROPY_CONVERTERS = [
     EquivalencyConverter(),
     UnitsMappingConverter(),
+    AngleConverter(),
+    LatitudeConverter(),
+    LongitudeConverter(),
+    EarthLocationConverter(),
+    FrameConverter(
+        "tag:astropy.org:astropy/coordinates/frames/cirs-*",
+        "astropy.coordinates.builtin_frames.cirs.CIRS",
+    ),
+    FrameConverter(
+        "tag:astropy.org:astropy/coordinates/frames/fk4-*",
+        "astropy.coordinates.builtin_frames.fk4.FK4",
+    ),
+    FrameConverter(
+        "tag:astropy.org:astropy/coordinates/frames/fk4noeterms-*",
+        "astropy.coordinates.builtin_frames.fk4.FK4NoETerms",
+    ),
+    FrameConverter(
+        "tag:astropy.org:astropy/coordinates/frames/fk5-*",
+        "astropy.coordinates.builtin_frames.fk5.FK5",
+    ),
+    FrameConverter(
+        "tag:astropy.org:astropy/coordinates/frames/galactic-*",
+        "astropy.coordinates.builtin_frames.galactic.Galactic",
+    ),
+    FrameConverter(
+        "tag:astropy.org:astropy/coordinates/frames/galactocentric-*",
+        "astropy.coordinates.builtin_frames.galactocentric.Galactocentric",
+    ),
+    FrameConverter(
+        "tag:astropy.org:astropy/coordinates/frames/gcrs-*",
+        "astropy.coordinates.builtin_frames.gcrs.GCRS",
+    ),
+    FrameConverter(
+        "tag:astropy.org:astropy/coordinates/frames/icrs-1.1.0",
+        "astropy.coordinates.builtin_frames.icrs.ICRS",
+    ),
+    FrameConverter(
+        "tag:astropy.org:astropy/coordinates/frames/itrs-*",
+        "astropy.coordinates.builtin_frames.itrs.ITRS",
+    ),
+    FrameConverter(
+        "tag:astropy.org:astropy/coordinates/frames/precessedgeocentric-*",
+        "astropy.coordinates.builtin_frames.gcrs.PrecessedGeocentric",
+    ),
+    LegacyICRSConverter(),
+    RepresentationConverter(),
+    SkyCoordConverter(),
+    SpectralCoordConverter(),
+    TimeDeltaConverter(),
 ]
 
 
@@ -390,6 +449,7 @@ ASTROPY_EXTENSION = ManifestExtension.from_uri(
 
 CORE_CONVERTERS = [
     QuantityConverter(),
+    TimeConverter(),
     UnitConverter(),
 ]
 
